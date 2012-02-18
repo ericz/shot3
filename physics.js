@@ -2,7 +2,7 @@ var Bridge = require('./bridge').Bridge;
 var bridge = new Bridge({host:'136.152.39.187'});
 var ball = {x:120,y:120,radius:20};
 var paddle = {x1:50,y1:50,x2:90,y2:60};
-var vel = {x:10,y:10};
+var vel = {x:5,y:5};
 var running = true;
 var hard, soft;
 var rotate;
@@ -123,18 +123,17 @@ physics = {
 		nextXBox = -1;
 		nextYBox = -1;
 		for (var box in boxes){
-			if (util.contains(ball,boxes[box])){
+			if (util.hardContains(ball,boxes[box])){
 				curBox = box;
 			}
 		}
 		nextXBall = {x:(ball.x+=vel.x),y:(ball.y),radius:ball.radius};
 		nextYBall = {x:(ball.x),y:(ball.y+=vel.y),radius:ball.radius};
-		console.log(nextXBall, nextYBall);
 		for (var box in boxes){
-			if (util.contains(nextXBall,boxes[box])){
+			if (util.softContains(nextXBall,boxes[box])){
 				nextXBox = box;
 			}
-			if (util.contains(nextYBall,boxes[box])){
+			if (util.softContains(nextYBall,boxes[box])){
 				nextYBox = box;
 			}
 		}	
@@ -154,7 +153,10 @@ physics = {
 	
 }
 util = {
-	contains:function(ball,box){
+	hardContains:function(ball,box){
+		return ((ball.x-ball.radius)>=box[0]] && (ball.x+ball.radius<=box[1]) && ((ball.y+ball.radius)<=box[1].y && (ball.y-ball.radius)>=box[0].y));
+	},
+	softContains:function(ball,box){
 		console.log((ball.y-ball.radius)<=box[1].y);
 		return ((ball.x+ball.radius)>=box[0].x && (ball.x-ball.radius)<=box[1].x) && ((ball.y-ball.radius)<=box[1].y && (ball.y+ball.radius)>=box[0].y)
 	}
