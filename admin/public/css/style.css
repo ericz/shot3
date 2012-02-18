@@ -28,9 +28,9 @@ body, html {
   width: 1000px;
   height: 500px;
   border: 15px solid #d4d4d4;
-  margin: 50px auto;
+  margin: 10px; auto;
   position: relative;
-  background-color: #fff;
+  background-color: #f9f9f9;
 }
 
 .green {
