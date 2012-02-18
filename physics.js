@@ -5,17 +5,16 @@ var paddle = {x1:50,y1:50,x2:90,y2:60};
 var vel = {x:10,y:10};
 var running = true;
 var hard, soft;
-var rotate;
 var shot3;
 physics = {
 	genericRotation:function(orient) {
-		var angle = orient * Math.PI / 2;
 		var rotate = function(x, y) {
+			var angle = poooop * Math.PI / 2;
 			xprime = Math.cos(angle) * x - Math.sin(angle) * y;
 			yprime = Math.sin(angle) * x + Math.cos(angle) * y;
 			return { x: xprime, y: yprime };
 		}
-		return rotate.toString();
+		return rotate.toString().replace('poooop', orient);
 	},
 	/** Sorts raw list by y coordinate in increasing order. */
 	sortByY:function(a, b) {
@@ -49,9 +48,9 @@ physics = {
 		boxes = m.corners;
 		soft = m.softs;
 		console.log(boxes);
-	//	ball.x = x;
-	//	ball.y = y;	
-	
+		ball.x = x;
+		ball.y = y;	
+		setInterval(physics.update, 200);
 	},
 	/** Translates entire bounds by offset. */
 	translate:function(raw) {
@@ -100,7 +99,7 @@ physics = {
 			var br = { x: m.x + m.width, y: m.y + m.height };
 			var rotate = physics.genericRotation(m.orientation);
 			
-			var pair = [tl, br, rotate];
+			var pair = [tl, br];
 			corners.push(pair);
 			
 			
@@ -132,9 +131,12 @@ physics = {
 		return sharad;
 	},
 	update:function(){
+		console.log('update');
 		curBox =  -1;
 		nextXBox = -1;
 		nextYBox = -1;
+		console.log(curBox);
+		console.log(ball);
 		for (var box = 0; box < boxes.length;box++){
 			if (util.hardContains(ball,boxes[box])){
 				curBox = box;
@@ -178,6 +180,6 @@ util = {
 bridge.ready(function(){
 	console.log('bridge');
 	bridge.getChannel('shot3', function(obj) { shot3 = obj; });
-	bridge.publishService('physics', physics, function() {console.log('hi')});
+	bridge.publishService('physics2', physics, function() {console.log('hi')});
 	
 });
