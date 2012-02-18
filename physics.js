@@ -78,7 +78,7 @@ physics = {
 		var monitors = physics.translate(rawmonitors);
 
 		monitors.sort(physics.sortByY);
-		
+		console.log(monitors);
 		// Top edge.
 		var topL = { x: monitors[0].x, y: monitors[0].y };
 		var topR = { x: monitors[0].x + monitors[0].width, y: monitors[0].y };
@@ -89,12 +89,15 @@ physics = {
 		
 		// Set of all defining corners.
 		var corners = [];
-		
+		console.log('before for loop');
 		for (var i in monitors) {
 			var m = monitors[i];
 			var tl = { x: m.x, y: m.y };
 			var br = { x: m.x + m.width, y: m.y + m.height };
 			var rotate = physics.genericRotation(m.orientation);
+			
+			m.callback[0](rotate, tl);
+			console.log('hi');
 			
 			var pair = [tl, br, rotate];
 			corners.push(pair);
@@ -117,6 +120,7 @@ physics = {
 				botR.x = Math.max(br.x, botR.x);
 			}
 		}
+				console.log(monitors);
 		var sharad = 	{
 										corners: corners, 
 										softs: { 
