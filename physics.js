@@ -58,15 +58,16 @@ physics = {
 		var m = physics.cornerFinder(r);
 		boxes = m.corners;
 		soft = m.softs;
+		console.log('softs: ',  soft);
 		
 		console.log(boxes);
 		leftAvg = (soft.left[1].y-soft.left[0].y)/2;
 		rightAvg = (soft.right[1].y-soft.right[0].y)/2;
-		paddle1.x1 = soft.left[0].x+50;
+		paddle1.x1 = soft.left[0].x+20;
 		paddle1.y1 = leftAvg-75; 
 		paddle1.x2 = paddle1.x1+40;
 		paddle1.y2 = paddle1.y1+150;
-		paddle2.x1 = soft.right[0].x-90;
+		paddle2.x1 = soft.right[0].x - 60;
 		paddle2.y1 = rightAvg-75;
 		paddle2.x2 = paddle2.x1+40;
 		paddle2.y2 = paddle2.y1+150;
@@ -114,13 +115,13 @@ physics = {
 		var monitors = physics.translate(rawmonitors);
 
 		monitors.sort(physics.sortByX);
-		
-		console.log(monitors);
-		// Top edge.
+		console.log('sorted monitors: ' + monitors[0].x);
+
+		// Left edge.
 		var leftT = { x: monitors[0].x, y: monitors[0].y };
 		var leftB = { x: monitors[0].x, y: monitors[0].y + monitors[0].height };
 		
-		// Bottom edge.
+		// Right edge.
 		var rightT = { x: Number.MIN_VALUE, y: Number.MIN_VALUE };
 		var rightB = { x: Number.MIN_VALUE, y: Number.MAX_VALUE };
 		
@@ -143,6 +144,7 @@ physics = {
 			if (tl.x == leftT.x) {
 				leftT.y = Math.min(tl.y, leftT.y);
 				leftB.y = Math.max(br.y, leftB.y);
+				console.log('changing left ', leftT, leftB);
 			}
 			
 			// Check for right edge. 
@@ -151,12 +153,13 @@ physics = {
 				rightB.y = br.y;
 				rightT.x = br.x;
 				rightB.x = br.x;
+				console.log('changing right ', rightT, rightB);
 			} else if (br.x == rightB.x) {
 				rightB.y = Math.max(br.y, rightB.y);
 				rightT.y = Math.min(tl.y, rightT.y);
+				console.log('changing right ', rightT, rightB);
 			}
 		}
-				console.log(monitors);
 		var sharad = 	{
 										corners: corners, 
 										softs: { 
@@ -164,6 +167,7 @@ physics = {
 														right: [rightT, rightB]
 													}
 									};
+									
 		return sharad;
 	},
 	update:function(){
@@ -198,18 +202,7 @@ physics = {
 		/*if (curBox == -1 && nextXBox != -1){
 			vel.x = -vel.x;
 		}*/
-		if (nextXBall.x>=soft.right[0].x){
-			score1++;
-			ball.x = startX;
-			ball.y = startY;
-			vel = {x:Math.abs(vel.x),y:Math.abs(vel.y)};
-		}
-		if (nextXBall.x<=soft.left[0].x){
-			score2++;
-			ball.x = startX;
-			ball.y = startY;
-			vel = {x:Math.abs(vel.x),y:Math.abs(vel.y)};
-		}
+		
 		if ((nextXBall.x>=paddle1.x1&&nextXBall.x<=paddle1.x2&&nextXBall.y<=paddle1.y2&&nextXBall.y>=paddle1.y2)||(nextXBall.x<=paddle1.x2&&nextXBall.x>=paddle1.x1&&nextXBall.y<=paddle1.y2&&nextXBall.y>=paddle1.y1)){
         vel.x = -vel.x;
         vel.x *= 1.1;
@@ -220,6 +213,8 @@ physics = {
         vel.x *= 1.1;
         vel.y *= 1.1;
 		}
+		
+
 		if (nextXBox == -1){
 			vel.x = -vel.x;
 		}
@@ -227,20 +222,32 @@ physics = {
 		if (nextYBox == -1){
 			vel.y = -vel.y;
 		}
+		
+		if (nextXBall.x>=soft.right[0].x){
+			score1++;
+			ball.x = startX;
+			ball.y = startY;
+			vel = {x:30,y:30};
+		}
+		if (nextXBall.x<=soft.left[0].x){
+			score2++;
+			ball.x = startX;
+			ball.y = startY;
+			vel = {x:Math.abs(vel.x),y:Math.abs(vel.y)};
+		}
 		ball.x += vel.x;
 		ball.y += vel.y;	
+		
 		shot3.draw({"ball":ball,"paddle":{'1':paddle1,'2':paddle2},"score":{'1':score1,'2':score2}});
 	},
 	movePaddle:function(player,amount){
-    console.log('move', arguments);
 		if (player == '1'){
-			paddle1.y1 += amount;
-			paddle1.y2 += amount;
+			paddle1.y1 += 2* amount;
+			paddle1.y2 += 2* amount;
 		} else if (player == '2'){
-			paddle2.y1 += amount;
-			paddle2.y2 += amount;
+			paddle2.y1 += 2* amount;
+			paddle2.y2 += 2* amount;
 		}
-    console.log(paddle1, paddle2);
 	} 
 	
 	
