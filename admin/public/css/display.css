@@ -2,15 +2,15 @@ body {
   overflow: hidden;
 }
 html {
-  /*background: url("../img/ricepaper2.png");*/
-  background: rgba(0, 0, 0, .9);
+  background: url("/img/px_by_Gre3g.png");
+  /*background: rgba(0, 0, 0, .9);*/
 }
 #ball {
   height: 40px;
   width: 40px;
   border-radius: 20px;
   /*background-color: rgba(20, 100, 250, .7);*/
-  background-color: rgba(220, 220, 250, 1);
+  background-color: rgba(200, 210, 250, 1);
   top: 50px;
   left: 20px;
   position: absolute;
