@@ -37,11 +37,20 @@ var frameGap;
  *                                           }*/
 
 var draw = function( drawables) {
-  var ballTop = drawables.ball.y - drawables.ball.radius - translate.y;
-  var ballLeft = drawables.ball.x - drawables.ball.radius - translate.x;
+  eval('var rotate = ' + rfunc);
+  
+  var windowpos = rotate(drawables.ball.x,
+  										drawables.ball.y);
+  
+  var ballTop = windowpos.y - drawables.ball.radius + translate.x + windowcorner.x;
+  var ballLeft = windowpos.x - drawables.ball.radius - translate.y + windowcorner.y;
+  
+  
   $("#ball").offset({ top: ballTop, left: ballLeft});
   //console.log(JSON.stringify(drawables.ball));
-  $("#paddle").offset({top: drawables.paddle.x1, left: drawables.paddle.x2});
+
+	//var paddlepos = rfunc(drawables.paddle.x1, drawables.paddle.x2);
+  //$("#paddle").offset({top: paddlepos.x, left: paddlepos.y});
 };
 
 var translate;
@@ -50,10 +59,12 @@ window.onload = function() {
   var bridge = new Bridge({url: "http://136.152.39.187:8091/bridge"}); 
   console.log("ONLOAD");
   bridge.ready(function() {
-    bridge.joinChannel('shot3', { draw: draw}, function(){});
-    bridge.getService("admin", function(x) { 
-     x.addRect($(window).width(), $(window).height(), function(rotate, tl) {
+    bridge.joinChannel('shot4', { draw: draw}, function(){});
+    bridge.getService("admin2", function(x) { 
+     x.addRect($(window).width(), $(window).height(), function(rotate, tl, wc) {
      		translate = tl;
+     		rfunc = rotate;
+     		windowcorner = wc;
      	});
     });
   });
