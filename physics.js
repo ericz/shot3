@@ -6,6 +6,7 @@ var vel = {x:10,y:10};
 var running = true;
 var hard, soft;
 var rotate;
+var shot3;
 physics = {
 	genericRotation:function(orient) {
 		var angle = orient * Math.PI / 2;
@@ -130,7 +131,7 @@ physics = {
 									};
 		return sharad;
 	},
-	update:function(callback){
+	update:function(){
 		curBox =  -1;
 		nextXBox = -1;
 		nextYBox = -1;
@@ -161,7 +162,7 @@ physics = {
 		}
 		ball.x += vel.x;
 		ball.y += vel.y;	
-		callback({"ball":ball,"paddle":paddle});
+		shot3.draw({"ball":ball,"paddle":paddle});
 	}
 	
 	
@@ -176,6 +177,7 @@ util = {
 }
 bridge.ready(function(){
 	console.log('bridge');
+	bridge.getChannel('shot3', function(obj) { shot3 = obj; });
 	bridge.publishService('physics', physics, function() {console.log('hi')});
 	
 });
