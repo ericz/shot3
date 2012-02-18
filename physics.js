@@ -4,11 +4,16 @@ var ball = {x:120,y:120,radius:20};
 var paddle1 = {x1:50,y1:50,x2:90,y2:60};
 var paddle2 = {x1:50,y1:50,x2:90,y2:70};
 var vel = {x:30,y:30};
+var startX, startY, startVel;
 var running = true;
 var hard, soft;
 var shot3;
+var interval;
 physics = {
-	genericRotation:function(orient) {
+  stop: function(){
+    clearInterval(interval);
+  },
+	/**genericRotation:function(orient) {
 		var rotate = function(x, y) {
 			var angle = poooop * Math.PI / 2;
 			xprime = Math.cos(angle) * x + Math.sin(angle) * y;
@@ -16,7 +21,7 @@ physics = {
 			return { x: xprime, y: yprime };
 		}
 		return rotate.toString().replace('poooop', orient);
-	},
+	},*/
 	/** Sorts raw list by y coordinate in increasing order. */
 	sortByY:function(a, b) {
 		return a.y - b.y;
@@ -45,30 +50,31 @@ physics = {
 		boxes = b;
 	},
 	start:function(r, x, y){
+		startVel = vel;
 		console.log("start");
-		
+		score1 = 0;
+		score2 = 0;	
 		console.log(r);
 		var m = physics.cornerFinder(r);
 		boxes = m.corners;
 		soft = m.softs;
 		
-		eval('var rfunc = ' + physics.genericRotation(1));
-		console.log(rfunc(5, 5));
-		
 		console.log(boxes);
-		leftAvg = (soft.left[0].y-soft.left[1].y)/2;
-		rightAvg = (soft.right[0].y-soft.right[1].y)/2;
+		leftAvg = (soft.left[1].y-soft.left[0].y)/2;
+		rightAvg = (soft.right[1].y-soft.right[0].y)/2;
 		paddle1.x1 = soft.left[0].x+50;
 		paddle1.y1 = leftAvg-75; 
 		paddle1.x2 = paddle1.x1+40;
 		paddle1.y2 = paddle1.y1+150;
-		paddle2.x1 = soft.right[0].x-50;
+		paddle2.x1 = soft.right[0].x-90;
 		paddle2.y1 = rightAvg-75;
-		paddle2.x2 = paddle2.x1-40;
+		paddle2.x2 = paddle2.x1+40;
 		paddle2.y2 = paddle2.y1+150;
-		ball.x = x;
-		ball.y = y;	
-		setInterval(physics.update, 200);
+		ball.x = soft.left[0].x+100;
+		ball.y = leftAvg;	
+		startX = soft.left[0].x+100;
+		startY = leftAvg;
+		interval = setInterval(physics.update, 100);
 	},
 	/** Translates entire bounds by offset. */
 	translate:function(raw) {
@@ -125,13 +131,12 @@ physics = {
 			var m = monitors[i];
 			var tl = { x: m.x, y: m.y };
 			var br = { x: m.x + m.width, y: m.y + m.height };
-			var rotate = physics.genericRotation(m.orientation);
-			var windowCorner = physics.findWindowCorner(m);
+			//var rotate = physics.genericRotation(m.orientation);
+			//var windowCorner = physics.findWindowCorner(m);
 			
-			m.callback[0](rotate, tl, windowCorner);
-			console.log('hi');
+			m.callback[0](m.orientation, tl);
 			
-			var pair = [tl, br, rotate];
+			var pair = [tl, br];
 			corners.push(pair);
 			
 			// Check for changes to leftmost edge.
@@ -193,24 +198,45 @@ physics = {
 		/*if (curBox == -1 && nextXBox != -1){
 			vel.x = -vel.x;
 		}*/
-		if (nextXBox == -1 || util.hardContains(ball,[{x:paddle1.x1,y:paddle1.y1},{x:paddle1.x2,y:paddle1.y2}]) || util.hardContains(ball,[{x:paddle2.x1,y:paddle2.y1},{x:paddle2.x2,y:paddle2.y2}])){
+		if (nextXBall.x>=soft.right[0].x){
+			score1++;
+			ball.x = startX;
+			ball.y = startY;
+			vel = startVel;
+		}
+		if (nextXBall.x<=soft.left[0].x){
+			score2++;
+			ball.x = startX;
+			ball.y = startY;
+			vel = startVel;
+		}
+		if ((nextXBall.x>=paddle1.x1&&nextXBall.x<=paddle1.x2&&nextXBall.y<=paddle1.y2&&nextXBall.y>=paddle1.y2)||(nextXBall.x<=paddle1.x2&&nextXBall.x>=paddle1.x1&&nextXBall.y<=paddle1.y2&&nextXBall.y>=paddle1.y1)){
+		vel.x = -vel.x;
+		}
+    if ((nextXBall.x>=paddle2.x1&&nextXBall.x<=paddle2.x2&&nextXBall.y<=paddle2.y2&&nextXBall.y>=paddle2.y2)||(nextXBall.x<=paddle2.x2&&nextXBall.x>=paddle2.x1&&nextXBall.y<=paddle2.y2&&nextXBall.y>=paddle2.y1)){
+		vel.x = -vel.x;
+		}
+		if (nextXBox == -1){
 			vel.x = -vel.x;
 		}
+
 		if (nextYBox == -1){
 			vel.y = -vel.y;
 		}
 		ball.x += vel.x;
 		ball.y += vel.y;	
-		shot3.draw({"ball":ball,"paddle":{'1':paddle1,'2':paddle2}});
+		shot3.draw({"ball":ball,"paddle":{'1':paddle1,'2':paddle2},"score":{'1':score1,'2':score2}});
 	},
 	movePaddle:function(player,amount){
+    console.log('move', arguments);
 		if (player == '1'){
 			paddle1.y1 += amount;
 			paddle1.y2 += amount;
 		} else if (player == '2'){
 			paddle2.y1 += amount;
 			paddle2.y2 += amount;
-		}	
+		}
+    console.log(paddle1, paddle2);
 	} 
 	
 	

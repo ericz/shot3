@@ -1,56 +1,28 @@
-var FPS = 50; 
-var updateTimeout = 1000/FPS;
-var lastFrame;
-var frameGap;
-/*function updateGame() {
- *   calculate();   
- *     draw();
- *       setTimeout(updateGame, updateTimeout);
- *         var curTime = new Date().getTime();
- *           if(lastFrame == undefined) {
- *               frameGap = "undefined";
- *                 } else {
- *                     frameGap = curTime - lastFrame;
- *                       }
- *                         lastFrame = curTime;
- *                           //console.log("FPS: " + 1/frameGap * 1000);
- *
- *                           }
- *
- *                           function sendCoordinates() {
- *                             console.log("Height: " + $(window).height());
- *                               console.log("Width: " + $(window).width());
- *                                 
- *                                 }
- *
- *                                 function calculate() {
- *                                   //ball.x += 5;
- *                                     //ball.y += 5;
- *                                     }
- *
- *                                     var shot3;
- *
- *                                     function draw() {
- *                                       var top = ball.x - ball.radius;
- *                                         var left = ball.y - ball.radius;
- *                                           $("#ball").offset({ top: top, left: left});
- *                                           }*/
-
 var draw = function( drawables) {
-  eval('var rotate = ' + rfunc);
+
+  var ballTop = drawables.ball.y - drawables.ball.radius - translate.y;
+  var ballLeft = drawables.ball.x - drawables.ball.radius - translate.x;
   
-  var windowpos = rotate(drawables.ball.x,
-  										drawables.ball.y);
-  
-  var ballTop = windowpos.y - drawables.ball.radius + translate.x + windowcorner.x;
-  var ballLeft = windowpos.x - drawables.ball.radius - translate.y + windowcorner.y;
-  
+  /*switch (orientation) {
+  	case 0:
+  		break;
+  	case 1:
+  		ballLeft = drawables.ball.y - drawables.ball.radius + translate.x;
+  		ballTop = - drawables.ball.x + drawables.ball.radius + translate.y;
+  		break;
+  	case 2:
+  		break;
+  	case 3:
+  		break;
+  		
+  }*/
   
   $("#ball").offset({ top: ballTop, left: ballLeft});
-  //console.log(JSON.stringify(drawables.ball));
 
-	//var paddlepos = rfunc(drawables.paddle.x1, drawables.paddle.x2);
-  //$("#paddle").offset({top: paddlepos.x, left: paddlepos.y});
+  $("#paddle1").offset({top: drawables.paddle['1'].y1 - translate.y, left: drawables.paddle['1'].x1 - translate.x});
+  $("#paddle2").offset({top: drawables.paddle['2'].y1 - translate.y, left: drawables.paddle['2'].x1 - translate.x});
+  $("#score1").text(drawables.score['1']);
+  $("#score2").text(drawables.score['2']);
 };
 
 var translate;
@@ -61,10 +33,9 @@ window.onload = function() {
   bridge.ready(function() {
     bridge.joinChannel('shot4', { draw: draw}, function(){});
     bridge.getService("admin2", function(x) { 
-     x.addRect($(window).width(), $(window).height(), function(rotate, tl, wc) {
+     x.addRect($(window).width(), $(window).height(), function(o, tl) {
      		translate = tl;
-     		rfunc = rotate;
-     		windowcorner = wc;
+     		orientation = o;
      	});
     });
   });

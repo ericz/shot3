@@ -22,6 +22,9 @@ app.get('/display', function(req, res) {
   res.render('display');
 });
 
+app.get('/control', function(req, res) {
+  res.render('control');
+});
 
 app.listen(80);
 
