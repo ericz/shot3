@@ -56,9 +56,9 @@ html {
   top: 400px;
   left: 300px;
   position: absolute;
-  transition: all linear 50ms;
+  transition: all linear 200ms;
   box-shadow: 2px 3px 2px rgba(0, 0, 0, .4);
-  -webkit-transition: all linear 50ms;
+  -webkit-transition: all linear 200ms;
 }
 
 #title {
@@ -69,5 +69,19 @@ html {
   font-family: Helvetica Neue, Arial, sans-serif;
   font-weight: bold;
   font-variant: small-caps;
-  margin: .5em;
+  margin-top: 20px;
+}
+
+.score {
+  display: inline;
+  font-size: 1.5em;
+  font-family: Helvetica Neue, Arial, sans-serif;
+  font-weight: bold;
+  font-variant: small-caps;
+  color: rgba(240, 220, 240, .9);
+  margin: 0 10px;
+}
+
+.scores {
+  text-align: center;
 }

@@ -4,7 +4,8 @@ var draw = function( drawables) {
   $("#ball").offset({ top: ballTop, left: ballLeft});
   $("#paddle1").offset({top: drawables.paddle['1'].y1 - translate.y, left: drawables.paddle['1'].x1 - translate.x});
   $("#paddle2").offset({top: drawables.paddle['2'].y1 - translate.y, left: drawables.paddle['2'].x1 - translate.x});
-
+  $("#score1").text(drawables.score['1']);
+  $("#score2").text(drawables.score['2']);
 };
 
 var translate;
