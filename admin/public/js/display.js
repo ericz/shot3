@@ -37,13 +37,14 @@ var frameGap;
  *                                           }*/
 
 var draw = function( drawables) {
-  var ballTop = drawables.ball.y - drawables.ball.radius;
-  var ballLeft = drawables.ball.x - drawables.ball.radius;
+  var ballTop = drawables.ball.y - drawables.ball.radius - translate.y;
+  var ballLeft = drawables.ball.x - drawables.ball.radius - translate.x;
   $("#ball").offset({ top: ballTop, left: ballLeft});
   //console.log(JSON.stringify(drawables.ball));
   $("#paddle").offset({top: drawables.paddle.x1, left: drawables.paddle.x2});
 };
 
+var translate;
 
 window.onload = function() {
   var bridge = new Bridge({url: "http://136.152.39.187:8091/bridge"}); 
@@ -52,7 +53,7 @@ window.onload = function() {
     bridge.joinChannel('shot3', { draw: draw}, function(){});
     bridge.getService("admin", function(x) { 
      x.addRect($(window).width(), $(window).height(), function(rotate, tl) {
-     		console.log(tl, rotate);
+     		translate = tl;
      	});
     });
   });
