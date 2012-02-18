@@ -3,7 +3,7 @@ var bridge = new Bridge({host:'136.152.39.187'});
 var ball = {x:120,y:120,radius:20};
 var paddle1 = {x1:50,y1:50,x2:90,y2:60};
 var paddle2 = {x1:50,y1:50,x2:90,y2:70};
-var vel = {x:30,y:30};
+var vel = {x:40,y:40};
 var startX, startY, startVel;
 var running = true;
 var hard, soft;
@@ -69,9 +69,9 @@ physics = {
 		paddle2.y1 = rightAvg-75;
 		paddle2.x2 = paddle2.x1+40;
 		paddle2.y2 = paddle2.y1+150;
-		ball.x = soft.left[0].x+100;
+		ball.x = soft.left[0].x+300;
 		ball.y = leftAvg;	
-		startX = soft.left[0].x+100;
+		startX = soft.left[0].x+300;
 		startY = leftAvg;
 		interval = setInterval(physics.update, 200);
 	},
@@ -191,19 +191,23 @@ physics = {
 			score1++;
 			ball.x = startX;
 			ball.y = startY;
-			vel = startVel;
+			vel = {x:Math.abs(vel.x),y:Math.abs(vel.y)};
 		}
 		if (nextXBall.x<=soft.left[0].x){
 			score2++;
 			ball.x = startX;
 			ball.y = startY;
-			vel = startVel;
+			vel = {x:Math.abs(vel.x),y:Math.abs(vel.y)};
 		}
 		if ((nextXBall.x>=paddle1.x1&&nextXBall.x<=paddle1.x2&&nextXBall.y<=paddle1.y2&&nextXBall.y>=paddle1.y2)||(nextXBall.x<=paddle1.x2&&nextXBall.x>=paddle1.x1&&nextXBall.y<=paddle1.y2&&nextXBall.y>=paddle1.y1)){
 		vel.x = -vel.x;
+    vel.x *= 1.1;
+    vel.y *= 1.1;
 		}
     if ((nextXBall.x>=paddle2.x1&&nextXBall.x<=paddle2.x2&&nextXBall.y<=paddle2.y2&&nextXBall.y>=paddle2.y2)||(nextXBall.x<=paddle2.x2&&nextXBall.x>=paddle2.x1&&nextXBall.y<=paddle2.y2&&nextXBall.y>=paddle2.y1)){
 		vel.x = -vel.x;
+        vel.x *= 1.1;
+    vel.y *= 1.1;
 		}
 		if (nextXBox == -1){
 			vel.x = -vel.x;
