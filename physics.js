@@ -52,8 +52,8 @@ physics = {
 		boxes = m.corners;
 		soft = m.softs;
 		console.log(boxes);
-		leftAvg = (soft.left[0].y-soft.left[1].y)/2;
-		rightAvg = (soft.right[0].y-soft.right[1].y)/2;
+		leftAvg = (soft.left[1].y-soft.left[0].y)/2;
+		rightAvg = (soft.right[1].y-soft.right[0].y)/2;
 		paddle1.x1 = soft.left[0].x+50;
 		paddle1.y1 = leftAvg-75; 
 		paddle1.x2 = paddle1.x1+40;
@@ -178,6 +178,7 @@ physics = {
 		/*if (curBox == -1 && nextXBox != -1){
 			vel.x = -vel.x;
 		}*/
+		console.log(util.hardContains(ball,[{x:paddle1.x1,y:paddle1.y1},{x:paddle1.x2,y:paddle1.y2}]) , util.hardContains(ball,[{x:paddle2.x1,y:paddle2.y1},{x:paddle2.x2,y:paddle2.y2}]));
 		if (nextXBox == -1 || util.hardContains(ball,[{x:paddle1.x1,y:paddle1.y1},{x:paddle1.x2,y:paddle1.y2}]) || util.hardContains(ball,[{x:paddle2.x1,y:paddle2.y1},{x:paddle2.x2,y:paddle2.y2}])){
 			vel.x = -vel.x;
 		}
