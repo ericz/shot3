@@ -1,7 +1,8 @@
 var Bridge = require('./bridge').Bridge;
 var bridge = new Bridge({host:'136.152.39.187'});
 var ball = {x:120,y:120,radius:20};
-var paddle = {x1:50,y1:50,x2:90,y2:60};
+var paddle1 = {x1:50,y1:50,x2:90,y2:60};
+var paddle2 = {x1:50,y1:50,x2:90,y2:70};
 var vel = {x:30,y:30};
 var running = true;
 var hard, soft;
@@ -22,7 +23,7 @@ physics = {
 	},
 	sortByX:function(a, b) {
 		return a.x - b.x;
-	}
+	},
 	/** Finds bounding box, with top left corner and bottom right corner. */
 	findBound:function(monitors) {
 		var minX = Number.MAX_VALUE;
@@ -51,6 +52,16 @@ physics = {
 		boxes = m.corners;
 		soft = m.softs;
 		console.log(boxes);
+		leftAvg = (soft.left[0].y-soft.left[1].y)/2;
+		rightAvg = (soft.right[0].y-soft.right[1].y)/2;
+		paddle1.x1 = soft.left[0].x+50;
+		paddle1.y1 = leftAvg-75; 
+		paddle1.x2 = paddle1.x1+40;
+		paddle1.y2 = paddle1.y1+150;
+		paddle2.x1 = soft.right[0].x-50;
+		paddle2.y1 = rightAvg-75;
+		paddle2.x2 = paddle2.x1-40;
+		paddle2.y2 = paddle2.y1+150;
 		ball.x = x;
 		ball.y = y;	
 		setInterval(physics.update, 200);
@@ -138,8 +149,6 @@ physics = {
 		curBox =  -1;
 		nextXBox = -1;
 		nextYBox = -1;
-		console.log(curBox);
-		console.log(ball);
 		for (var box = 0; box < boxes.length;box++){
 			if (util.hardContains(ball,boxes[box])){
 				curBox = box;
@@ -169,7 +178,7 @@ physics = {
 		/*if (curBox == -1 && nextXBox != -1){
 			vel.x = -vel.x;
 		}*/
-		if (nextXBox == -1){
+		if (nextXBox == -1 || util.hardContains(ball,[{x:paddle1.x1,y:paddle1.y1},{x:paddle1.x2,y:paddle1.y2}]) || util.hardContains(ball,[{x:paddle2.x1,y:paddle2.y1},{x:paddle2.x2,y:paddle2.y2}])){
 			vel.x = -vel.x;
 		}
 		if (nextYBox == -1){
@@ -177,8 +186,17 @@ physics = {
 		}
 		ball.x += vel.x;
 		ball.y += vel.y;	
-		shot3.draw({"ball":ball,"paddle":paddle});
-	}
+		shot3.draw({"ball":ball,"paddle":{'1':paddle1,'2':paddle2}});
+	},
+	movePaddle:function(player,amount){
+		if (player == '1'){
+			paddle1.y1 += amount;
+			paddle1.y2 += amount;
+		} else if (player == '2'){
+			paddle2.y1 += amount;
+			paddle2.y2 += amount;
+		}	
+	} 
 	
 	
 }

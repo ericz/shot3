@@ -1,47 +1,10 @@
-var FPS = 50; 
-var updateTimeout = 1000/FPS;
-var lastFrame;
-var frameGap;
-/*function updateGame() {
- *   calculate();   
- *     draw();
- *       setTimeout(updateGame, updateTimeout);
- *         var curTime = new Date().getTime();
- *           if(lastFrame == undefined) {
- *               frameGap = "undefined";
- *                 } else {
- *                     frameGap = curTime - lastFrame;
- *                       }
- *                         lastFrame = curTime;
- *                           //console.log("FPS: " + 1/frameGap * 1000);
- *
- *                           }
- *
- *                           function sendCoordinates() {
- *                             console.log("Height: " + $(window).height());
- *                               console.log("Width: " + $(window).width());
- *                                 
- *                                 }
- *
- *                                 function calculate() {
- *                                   //ball.x += 5;
- *                                     //ball.y += 5;
- *                                     }
- *
- *                                     var shot3;
- *
- *                                     function draw() {
- *                                       var top = ball.x - ball.radius;
- *                                         var left = ball.y - ball.radius;
- *                                           $("#ball").offset({ top: top, left: left});
- *                                           }*/
-
 var draw = function( drawables) {
   var ballTop = drawables.ball.y - drawables.ball.radius - translate.y;
   var ballLeft = drawables.ball.x - drawables.ball.radius - translate.x;
   $("#ball").offset({ top: ballTop, left: ballLeft});
-  //console.log(JSON.stringify(drawables.ball));
-  $("#paddle").offset({top: drawables.paddle.x1, left: drawables.paddle.x2});
+  $("#paddle1").offset({top: drawables.paddle['1'].x1, left: drawables.paddle.x2});
+  $("#paddle2").offset({top: drawables.paddle['2'].x1, left: drawables.paddle.x2});
+
 };
 
 var translate;
