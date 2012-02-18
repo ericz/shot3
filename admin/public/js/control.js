@@ -23,5 +23,19 @@ $(function(){
   bridge.ready(function(){
     bridge.getService('physics', function(obj){physics = obj});  
   });
+  
+  $('#lu').mousedown(function(){
+     physics.movePaddle('1', -50); 
+  });
+  $('#ld').mousedown(function(){
+     physics.movePaddle('1', 50); 
+  });
+  $('#ru').mousedown(function(){
+     physics.movePaddle('2', -50); 
+  });
+  $('#rd').mousedown(function(){
+     physics.movePaddle('2', 50); 
+  });
+  
 
 });
