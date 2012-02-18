@@ -7,7 +7,12 @@ var vel = {x:30,y:30};
 var running = true;
 var hard, soft;
 var shot3;
+var interval;
+
 physics = {
+  stop: function(){
+    clearInterval(interval);
+  },
 	genericRotation:function(orient) {
 		var rotate = function(x, y) {
 			var angle = poooop * Math.PI / 2;
@@ -52,8 +57,8 @@ physics = {
 		boxes = m.corners;
 		soft = m.softs;
 		console.log(boxes);
-		leftAvg = (soft.left[0].y-soft.left[1].y)/2;
-		rightAvg = (soft.right[0].y-soft.right[1].y)/2;
+		leftAvg = (soft.left[1].y-soft.left[0].y)/2;
+		rightAvg = (soft.right[1].y-soft.right[0].y)/2;
 		paddle1.x1 = soft.left[0].x+50;
 		paddle1.y1 = leftAvg-75; 
 		paddle1.x2 = paddle1.x1+40;
@@ -64,7 +69,7 @@ physics = {
 		paddle2.y2 = paddle2.y1+150;
 		ball.x = x;
 		ball.y = y;	
-		setInterval(physics.update, 200);
+		interval = setInterval(physics.update, 200);
 	},
 	/** Translates entire bounds by offset. */
 	translate:function(raw) {
@@ -178,7 +183,8 @@ physics = {
 		/*if (curBox == -1 && nextXBox != -1){
 			vel.x = -vel.x;
 		}*/
-		if (nextXBox == -1 || util.hardContains(ball,[{x:paddle1.x1,y:paddle1.y1},{x:paddle1.x2,y:paddle1.y2}]) || util.hardContains(ball,[{x:paddle2.x1,y:paddle2.y1},{x:paddle2.x2,y:paddle2.y2}])){
+		console.log([{x:paddle1.x1,y:paddle1.y1},{x:paddle1.x2,y:paddle1.y2}],[{x:paddle2.x1,y:paddle2.y1},{x:paddle2.x2,y:paddle2.y2}]);
+		if (nextXBox == -1 || util.hardContains(nextXBall,[{x:paddle1.x1,y:paddle1.y1},{x:paddle1.x2,y:paddle1.y2}]) || util.hardContains(nextXBall,[{x:paddle2.x1,y:paddle2.y1},{x:paddle2.x2,y:paddle2.y2}])){
 			vel.x = -vel.x;
 		}
 		if (nextYBox == -1){
