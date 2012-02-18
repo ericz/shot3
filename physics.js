@@ -4,11 +4,11 @@ var ball = {x:120,y:120,radius:20};
 var paddle1 = {x1:50,y1:50,x2:90,y2:60};
 var paddle2 = {x1:50,y1:50,x2:90,y2:70};
 var vel = {x:30,y:30};
+var startX, startY, startVel;
 var running = true;
 var hard, soft;
 var shot3;
 var interval;
-
 physics = {
   stop: function(){
     clearInterval(interval);
@@ -50,8 +50,10 @@ physics = {
 		boxes = b;
 	},
 	start:function(r, x, y){
+		startVel = vel;
 		console.log("start");
-		
+		score1 = 0;
+		score2 = 0;	
 		console.log(r);
 		var m = physics.cornerFinder(r);
 		boxes = m.corners;
@@ -67,8 +69,10 @@ physics = {
 		paddle2.y1 = rightAvg-75;
 		paddle2.x2 = paddle2.x1+40;
 		paddle2.y2 = paddle2.y1+150;
-		ball.x = x;
-		ball.y = y;	
+		ball.x = soft.left[0].x+100;
+		ball.y = leftAvg;	
+		startX = soft.left[0].x+100;
+		startY = leftAvg;
 		interval = setInterval(physics.update, 200);
 	},
 	/** Translates entire bounds by offset. */
@@ -183,13 +187,24 @@ physics = {
 		/*if (curBox == -1 && nextXBox != -1){
 			vel.x = -vel.x;
 		}*/
+		if (nextXBall.x>=soft.right[0].x){
+			score1++;
+			ball.x = startX;
+			ball.y = startY;
+			vel = startVel;
+		}
+		if (nextXBall.x<=soft.left[0].x){
+			score2++;
+			ball.x = startX;
+			ball.y = startY;
+			vel = startVel;
+		}
 		if ((nextXBall.x>=paddle1.x1&&nextXBall.x<=paddle1.x2&&nextXBall.y<=paddle1.y2&&nextXBall.y>=paddle1.y2)||(nextXBall.x<=paddle1.x2&&nextXBall.x>=paddle1.x1&&nextXBall.y<=paddle1.y2&&nextXBall.y>=paddle1.y1)){
 		vel.x = -vel.x;
 		}
     if ((nextXBall.x>=paddle2.x1&&nextXBall.x<=paddle2.x2&&nextXBall.y<=paddle2.y2&&nextXBall.y>=paddle2.y2)||(nextXBall.x<=paddle2.x2&&nextXBall.x>=paddle2.x1&&nextXBall.y<=paddle2.y2&&nextXBall.y>=paddle2.y1)){
 		vel.x = -vel.x;
 		}
-		console.log([{x:paddle1.x1,y:paddle1.y1},{x:paddle1.x2,y:paddle1.y2}],[{x:paddle2.x1,y:paddle2.y1},{x:paddle2.x2,y:paddle2.y2}]);
 		if (nextXBox == -1){
 			vel.x = -vel.x;
 		}
@@ -199,7 +214,7 @@ physics = {
 		}
 		ball.x += vel.x;
 		ball.y += vel.y;	
-		shot3.draw({"ball":ball,"paddle":{'1':paddle1,'2':paddle2}});
+		shot3.draw({"ball":ball,"paddle":{'1':paddle1,'2':paddle2},"score":{'1':score1,'2':score2}});
 	},
 	movePaddle:function(player,amount){
     console.log('move', arguments);
