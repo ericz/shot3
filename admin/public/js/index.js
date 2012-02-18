@@ -20,7 +20,8 @@ var send = function send () {
       orientation: $(this).data('o')
     });
   });
-  
+
+  physics.start(data, 0, 0);
   
 };
 
@@ -59,7 +60,7 @@ $(function(){
   bridge = new Bridge({url: 'http://136.152.39.187:8091/bridge'});
   bridge.ready(function(){
     bridge.publishService('admin', {addRect: addRect});
-    bridge.getService('physics', function(obj){physics = obj});  
+    bridge.getService('physics2', function(obj){physics = obj});  
   });
 
 });
