@@ -145,15 +145,25 @@ physics = {
 		nextXBall = {x:(ball.x+vel.x),y:(ball.y),radius:ball.radius};
 		nextYBall = {x:(ball.x),y:(ball.y+vel.y),radius:ball.radius};
 		for (var box=0;box<boxes.length;box++){
-			if (util.softContains(nextXBall,boxes[box])){
-				nextXBox = box;
-			}
-			if (util.softContains(nextYBall,boxes[box])){
-				nextYBox = box;
+			if (box != curBox){
+				if (util.softXContains(nextXBall,boxes[box])){
+					nextXBox = box;
+				} 
+				if (util.softYContains(nextYBall,boxes[box])){
+					nextYBox = box;
+				}
+			} else {
+				console.log("sup");
+				if (util.hardContains(nextXBall,boxes[box])){
+					nextXBox = box;
+				}
+				if (util.hardContains(nextYBall, boxes[box])){
+					nextYBox = box;
+				}
 			}
 		}
-		console.log(curBox, nextXBox, util.hardContains(ball,boxes[curBox]));
-		if (nextXBox == -1 && !util.hardContains(ball,boxes[curBox])){
+		console.log(curBox,nextXBox,nextYBox);
+		if (curBox == -1 && nextXBox != -1){
 			vel.x = -vel.x;
 		}
 		if (nextXBox == -1){
@@ -173,6 +183,11 @@ util = {
 	hardContains:function(ball,box){
 		return ((ball.x-ball.radius)>=box[0].x && (ball.x+ball.radius)<=box[1].x) && ((ball.y+ball.radius)<=box[1].y && (ball.y-ball.radius)>=box[0].y)
 },
+	softXContains:function(ball,box){
+		return ((ball.x+ball.radius)>=box[0].x && (ball.x-ball.radius)<=box[1].x) && ((ball.x-ball.radius)<=box[1].y && (ball.y-ball.radius)>=box[0].y);
+	}, softYContains:function(ball,box){
+		return ((ball.y-ball.radius)<=box[1].y && (ball.y+ball.radius)>=box[0].y);	
+	},
 	softContains:function(ball,box){
 		return ((ball.x+ball.radius)>=box[0].x && (ball.x-ball.radius)<=box[1].x) && ((ball.y-ball.radius)<=box[1].y && (ball.y+ball.radius)>=box[0].y)
 	}
