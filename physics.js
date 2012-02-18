@@ -7,7 +7,12 @@ var vel = {x:30,y:30};
 var running = true;
 var hard, soft;
 var shot3;
+var interval;
+
 physics = {
+  stop: function(){
+    clearInterval(interval);
+  },
 	genericRotation:function(orient) {
 		var rotate = function(x, y) {
 			var angle = poooop * Math.PI / 2;
@@ -64,7 +69,7 @@ physics = {
 		paddle2.y2 = paddle2.y1+150;
 		ball.x = x;
 		ball.y = y;	
-		setInterval(physics.update, 200);
+		interval = setInterval(physics.update, 200);
 	},
 	/** Translates entire bounds by offset. */
 	translate:function(raw) {
