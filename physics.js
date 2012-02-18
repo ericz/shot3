@@ -5,17 +5,16 @@ var paddle = {x1:50,y1:50,x2:90,y2:60};
 var vel = {x:10,y:10};
 var running = true;
 var hard, soft;
-var rotate;
 var shot3;
 physics = {
 	genericRotation:function(orient) {
-		var angle = orient * Math.PI / 2;
 		var rotate = function(x, y) {
+			var angle = poooop * Math.PI / 2;
 			xprime = Math.cos(angle) * x - Math.sin(angle) * y;
 			yprime = Math.sin(angle) * x + Math.cos(angle) * y;
 			return { x: xprime, y: yprime };
 		}
-		return rotate.toString();
+		return rotate.toString().replace('poooop', orient);
 	},
 	/** Sorts raw list by y coordinate in increasing order. */
 	sortByY:function(a, b) {
@@ -49,9 +48,9 @@ physics = {
 		boxes = m.corners;
 		soft = m.softs;
 		console.log(boxes);
-	//	ball.x = x;
-	//	ball.y = y;	
-	
+		ball.x = x;
+		ball.y = y;	
+		setInterval(physics.update, 200);
 	},
 	/** Translates entire bounds by offset. */
 	translate:function(raw) {
@@ -77,11 +76,8 @@ physics = {
     * right edges. */
 	cornerFinder:function(rawmonitors) {
 		var monitors = physics.translate(rawmonitors);
-		
-		console.log(monitors);
+
 		monitors.sort(physics.sortByY);
-		
-		console.log(monitors);
 		
 		// Top edge.
 		var topL = { x: monitors[0].x, y: monitors[0].y };
@@ -121,7 +117,6 @@ physics = {
 				botR.x = Math.max(br.x, botR.x);
 			}
 		}
-		console.log(monitors);
 		var sharad = 	{
 										corners: corners, 
 										softs: { 
@@ -132,9 +127,12 @@ physics = {
 		return sharad;
 	},
 	update:function(){
+		console.log('update');
 		curBox =  -1;
 		nextXBox = -1;
 		nextYBox = -1;
+		console.log(curBox);
+		console.log(ball);
 		for (var box = 0; box < boxes.length;box++){
 			if (util.hardContains(ball,boxes[box])){
 				curBox = box;
@@ -143,17 +141,27 @@ physics = {
 		nextXBall = {x:(ball.x+vel.x),y:(ball.y),radius:ball.radius};
 		nextYBall = {x:(ball.x),y:(ball.y+vel.y),radius:ball.radius};
 		for (var box=0;box<boxes.length;box++){
-			if (util.softContains(nextXBall,boxes[box])){
-				nextXBox = box;
-			}
-			if (util.softContains(nextYBall,boxes[box])){
-				nextYBox = box;
-			}
+			//if (box != curBox){
+				if (util.softContains(nextXBall,boxes[box])){
+					nextXBox = box;
+				} 
+				if (util.softContains(nextYBall,boxes[box])){
+					nextYBox = box;
+				}
+			/*} else {
+				console.log("sup");
+				if (util.hardContains(nextXBall,boxes[box])){
+					nextXBox = box;
+				}
+				if (util.hardContains(nextYBall, boxes[box])){
+					nextYBox = box;
+				}
+			}*/
 		}
-		console.log(curBox, nextXBox, util.hardContains(ball,boxes[curBox]));
-		if (nextXBox == -1 && !util.hardContains(ball,boxes[curBox])){
+		console.log(curBox,nextXBox,nextYBox);
+		/*if (curBox == -1 && nextXBox != -1){
 			vel.x = -vel.x;
-		}
+		}*/
 		if (nextXBox == -1){
 			vel.x = -vel.x;
 		}
@@ -171,13 +179,19 @@ util = {
 	hardContains:function(ball,box){
 		return ((ball.x-ball.radius)>=box[0].x && (ball.x+ball.radius)<=box[1].x) && ((ball.y+ball.radius)<=box[1].y && (ball.y-ball.radius)>=box[0].y)
 },
+	softXContains:function(ball,box){
+		return ((ball.x+ball.radius)>=box[0].x && (ball.x-ball.radius)<=box[1].x) && ((ball.x-ball.radius)<=box[1].y && (ball.y-ball.radius)>=box[0].y);
+	}, softYContains:function(ball,box){
+		return ((ball.y-ball.radius)<=box[1].y && (ball.y+ball.radius)>=box[0].y);	
+	},
 	softContains:function(ball,box){
 		return ((ball.x+ball.radius)>=box[0].x && (ball.x-ball.radius)<=box[1].x) && ((ball.y-ball.radius)<=box[1].y && (ball.y+ball.radius)>=box[0].y)
 	}
 }
 bridge.ready(function(){
 	console.log('bridge');
-	bridge.getChannel('shot3', function(obj) { shot3 = obj; });
+	bridge.joinChannel('shot3',{draw:function(){}},function(){});
+	bridge.getChannel('shot3', function(obj) { shot3 = obj;shot3.draw('asd') });
 	bridge.publishService('physics', physics, function() {console.log('hi')});
 	
 });
