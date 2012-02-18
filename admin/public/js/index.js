@@ -5,7 +5,8 @@ var physics;
 
 
 var addRect = function addRect (w, h, callback) {
-  $('<div></div>').data('o', 0).data('cb', callback).dblclick(rotate).addClass('rect').css({width: w/7, height: h/7, 'background-color': '#'+Math.floor(Math.random()*16777215).toString(16)}).draggable({snap:true, snapMode: 'outer'}).appendTo('#field');
+  var close = $('<div></div>').addClass('close').click(deleteRect);
+  $('<div></div>').data('o', 0).data('cb', callback).dblclick(rotate).addClass('rect').append(close).css({width: w/7, height: h/7, 'background-color': '#'+Math.floor(Math.random()*16777215).toString(16)}).draggable({snap:true, snapMode: 'outer'}).appendTo('#field');
 };
 
 var send = function send () {
@@ -23,9 +24,14 @@ var send = function send () {
       callback: [$(this).data('cb')]
     });
   });
+  console.log(data);
   physics.start(data, 5,5);
   
 };
+
+var deleteRect = function() {
+  $(this).parent().remove();
+}
 
 var rotate = function() {
   var o = parseInt($(this).data('o'), 10);
