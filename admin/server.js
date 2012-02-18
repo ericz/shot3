@@ -15,6 +15,10 @@ app.get('/', function(req, res){
   res.render('index');
 });
 
+app.get('/display', function(req, res) {
+  res.render('display');
+});
+
 
 app.listen(80);
 
