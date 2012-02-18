@@ -40,10 +40,10 @@ physics = {
 	debug:function(b){
 		boxes = b;
 	},
-	start:function(r, x, y, o){
-		rotate = physics.genericRotation(o);
-	
+	start:function(r, x, y){
 		console.log("start");
+		
+		console.log(r);
 		var m = physics.cornerFinder(r);
 		boxes = m.corners;
 		soft = m.softs;
@@ -55,8 +55,10 @@ physics = {
 	/** Translates entire bounds by offset. */
 	translate:function(raw) {
 		var bounds = physics.findBound(raw);
-		var xoff = bounds[0];
-		var yoff = bounds[1];
+		var top = bounds[0];
+		var xoff = top[0];
+		var yoff = top[1];
+		console.log(bounds);
 		
 		var pushed = [];
 		
@@ -74,7 +76,11 @@ physics = {
     * right edges. */
 	cornerFinder:function(rawmonitors) {
 		var monitors = physics.translate(rawmonitors);
-		monitors.sort(sortByY);
+		
+		console.log(monitors);
+		monitors.sort(physics.sortByY);
+		
+		console.log(monitors);
 		
 		// Top edge.
 		var topL = { x: monitors[0].x, y: monitors[0].y };
@@ -91,13 +97,16 @@ physics = {
 			var m = monitors[i];
 			var tl = { x: m.x, y: m.y };
 			var br = { x: m.x + m.width, y: m.y + m.height };
-			var pair = [tl, br];
+			var rotate = physics.genericRotation(m.orientation);
+			
+			var pair = [tl, br, rotate];
 			corners.push(pair);
+			
 			
 			// Check for changes to top edge.
 			if (tl.y == topL.y) {
-				topL.x = min(tl.x, topL.x);
-				topR.x = max(br.x, topR.x);
+				topL.x = Math.min(tl.x, topL.x);
+				topR.x = Math.max(br.x, topR.x);
 			}
 			
 			// Check for bottom edge. 
@@ -105,13 +114,13 @@ physics = {
 				botR.y = br.y;
 				botL.y = br.y;
 				botR.x = br.x;
-				botL.x = br.x - width;
+				botL.x = br.x - m.width;
 			} else if (br.y == botR.y) {
-				botL.x = min(tl.x, botL.x);
-				botR.x = max(br.x, botR.x);
+				botL.x = Math.min(tl.x, botL.x);
+				botR.x = Math.max(br.x, botR.x);
 			}
 		}
-		
+		console.log(monitors);
 		var sharad = 	{
 										corners: corners, 
 										softs: { 
@@ -166,5 +175,7 @@ util = {
 	}
 }
 bridge.ready(function(){
-	bridge.publishService('physics',physics);
+	console.log('bridge');
+	bridge.publishService('physics', physics, function() {console.log('hi')});
+	
 });
