@@ -65,10 +65,10 @@ var findCenterOffset = function(xoff, yoff) {
 
 $(function(){
   
-  bridge = new Bridge({url: 'http://136.152.39.187:8091/bridge'});
+  bridge = new Bridge({url: 'http://136.152.37.120:8091/bridge'});
   bridge.ready(function(){
-    bridge.publishService('admin2', {addRect: addRect});
-    bridge.getService('physics2', function(obj){physics = obj});  
+    bridge.publishService('admin', {addRect: addRect});
+    bridge.getService('physics', function(obj){physics = obj});  
   });
 
 });

@@ -1,5 +1,5 @@
 var Bridge = require('./bridge').Bridge;
-var bridge = new Bridge({host:'136.152.39.187'});
+var bridge = new Bridge({host:'136.152.37.120 '});
 var ball = {x:120,y:120,radius:20};
 var paddle1 = {x1:50,y1:50,x2:90,y2:60};
 var paddle2 = {x1:50,y1:50,x2:90,y2:70};
@@ -260,8 +260,9 @@ util = {
 }
 bridge.ready(function(){
 	console.log('bridge');
-	bridge.joinChannel('shot4',{draw:function(){}},function(){});
-	bridge.getChannel('shot4', function(obj) { shot3 = obj;shot3.draw('asd') });
-	bridge.publishService('physics2', physics, function() {console.log('physics2')});
+	bridge.joinChannel('shot3',{draw:function(){}},function(){
+    	bridge.getChannel('shot3', function(obj) { shot3 = obj;});
+  });
+	bridge.publishService('physics', physics, function() {console.log('physics')});
 	
 });
