@@ -1,5 +1,5 @@
 var Bridge = require('./bridge').Bridge;
-//var bridge = new Bridge({host:'136.152.39.187'});
+var bridge = new Bridge({host:'136.152.39.187'});
 var ball = {x:0,y:0,radius:5};
 var paddle;
 var vel = {x:0,y:1};
