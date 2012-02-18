@@ -141,14 +141,14 @@ physics = {
 		nextXBall = {x:(ball.x+vel.x),y:(ball.y),radius:ball.radius};
 		nextYBall = {x:(ball.x),y:(ball.y+vel.y),radius:ball.radius};
 		for (var box=0;box<boxes.length;box++){
-			if (box != curBox){
-				if (util.softXContains(nextXBall,boxes[box])){
+			//if (box != curBox){
+				if (util.softContains(nextXBall,boxes[box])){
 					nextXBox = box;
 				} 
-				if (util.softYContains(nextYBall,boxes[box])){
+				if (util.softContains(nextYBall,boxes[box])){
 					nextYBox = box;
 				}
-			} else {
+			/*} else {
 				console.log("sup");
 				if (util.hardContains(nextXBall,boxes[box])){
 					nextXBox = box;
@@ -156,12 +156,12 @@ physics = {
 				if (util.hardContains(nextYBall, boxes[box])){
 					nextYBox = box;
 				}
-			}
+			}*/
 		}
 		console.log(curBox,nextXBox,nextYBox);
-		if (curBox == -1 && nextXBox != -1){
+		/*if (curBox == -1 && nextXBox != -1){
 			vel.x = -vel.x;
-		}
+		}*/
 		if (nextXBox == -1){
 			vel.x = -vel.x;
 		}
@@ -190,7 +190,8 @@ util = {
 }
 bridge.ready(function(){
 	console.log('bridge');
-	bridge.getChannel('shot3', function(obj) { shot3 = obj; });
-	bridge.publishService('physics2', physics, function() {console.log('hi')});
+	bridge.joinChannel('shot3',{draw:function(){}},function(){});
+	bridge.getChannel('shot3', function(obj) { shot3 = obj;shot3.draw('asd') });
+	bridge.publishService('physics', physics, function() {console.log('hi')});
 	
 });
