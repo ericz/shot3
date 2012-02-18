@@ -53,7 +53,6 @@ window.onload = function() {
     bridge.joinChannel('shot3', { draw: draw}, function(){});
     bridge.getService("physics", function(x) { 
       x.debug([[{x: 0, y: 0}, {x: 200, y: 200}],[{x: 50, y: 200},{x:250,y:400}]]);
-      setInterval(function() {x.update()}, 200);
     });
   });
 };
