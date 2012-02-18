@@ -46,9 +46,10 @@ var draw = function( drawables) {
 
 
 window.onload = function() {
-  var bridge = new Bridge({url: "http://136.152.39.187/"}); 
+  var bridge = new Bridge({url: "http://136.152.39.187/bridge"}); 
   console.log("ONLOAD");
   bridge.ready(function() {
+    console.log("At start of readY");
     bridge.joinChannel('shot3', { draw: draw});
     console.log("READY");
     bridge.getService("physics", function(x) { 
