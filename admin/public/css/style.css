@@ -22,7 +22,7 @@ a img {border: none;} /* Gets rid of IE's blue borders */
 #field {
   width: 1000px;
   height: 500px;
-  border: 1px solid #000;
-  margin: 0 auto;
+  border: 5px solid #d4d4d4;
+  margin: 50px auto;
   position: relative;
 }

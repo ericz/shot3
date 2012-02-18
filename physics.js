@@ -13,15 +13,15 @@ physics = {
   stop: function(){
     clearInterval(interval);
   },
-	genericRotation:function(orient) {
+	/**genericRotation:function(orient) {
 		var rotate = function(x, y) {
 			var angle = poooop * Math.PI / 2;
-			xprime = Math.cos(angle) * x - Math.sin(angle) * y;
-			yprime = Math.sin(angle) * x + Math.cos(angle) * y;
+			xprime = Math.cos(angle) * x + Math.sin(angle) * y;
+			yprime = - Math.sin(angle) * x + Math.cos(angle) * y;
 			return { x: xprime, y: yprime };
 		}
 		return rotate.toString().replace('poooop', orient);
-	},
+	},*/
 	/** Sorts raw list by y coordinate in increasing order. */
 	sortByY:function(a, b) {
 		return a.y - b.y;
@@ -58,6 +58,7 @@ physics = {
 		var m = physics.cornerFinder(r);
 		boxes = m.corners;
 		soft = m.softs;
+		
 		console.log(boxes);
 		leftAvg = (soft.left[1].y-soft.left[0].y)/2;
 		rightAvg = (soft.right[1].y-soft.right[0].y)/2;
@@ -73,7 +74,7 @@ physics = {
 		ball.y = leftAvg;	
 		startX = soft.left[0].x+300;
 		startY = leftAvg;
-		interval = setInterval(physics.update, 200);
+		interval = setInterval(physics.update, 100);
 	},
 	/** Translates entire bounds by offset. */
 	translate:function(raw) {
@@ -93,6 +94,18 @@ physics = {
 		}
 		
 		return pushed;
+	},
+	findWindowCorner:function(m) {
+		switch(m.orientation) {
+			case 0:
+				return { x: m.x, y: m.y };
+			case 1:
+				return { x: m.x, y: m.y + m.width };
+			case 2:
+				return { x: m.x + m.height, y: m.y + m.width };
+			case 3:
+				return { x: m.x + m.height, y: m.y };
+		}
 	},
 	/** rawmonitors is a list of objects with keys width, height, x, y, 
     * orientation (0-3). Edgefinder returns a list of top left and bottom
@@ -118,12 +131,12 @@ physics = {
 			var m = monitors[i];
 			var tl = { x: m.x, y: m.y };
 			var br = { x: m.x + m.width, y: m.y + m.height };
-			var rotate = physics.genericRotation(m.orientation);
+			//var rotate = physics.genericRotation(m.orientation);
+			//var windowCorner = physics.findWindowCorner(m);
 			
-			m.callback[0](rotate, tl);
-			console.log('hi');
+			m.callback[0](m.orientation, tl);
 			
-			var pair = [tl, br, rotate];
+			var pair = [tl, br];
 			corners.push(pair);
 			
 			// Check for changes to leftmost edge.
@@ -154,7 +167,6 @@ physics = {
 		return sharad;
 	},
 	update:function(){
-		console.log('update');
 		curBox =  -1;
 		nextXBox = -1;
 		nextYBox = -1;
@@ -183,7 +195,6 @@ physics = {
 				}
 			}*/
 		}
-		console.log(curBox,nextXBox,nextYBox);
 		/*if (curBox == -1 && nextXBox != -1){
 			vel.x = -vel.x;
 		}*/
@@ -249,8 +260,8 @@ util = {
 }
 bridge.ready(function(){
 	console.log('bridge');
-	bridge.joinChannel('shot3',{draw:function(){}},function(){});
-	bridge.getChannel('shot3', function(obj) { shot3 = obj;shot3.draw('asd') });
-	bridge.publishService('physics', physics, function() {console.log('hi')});
+	bridge.joinChannel('shot4',{draw:function(){}},function(){});
+	bridge.getChannel('shot4', function(obj) { shot3 = obj;shot3.draw('asd') });
+	bridge.publishService('physics2', physics, function() {console.log('physics2')});
 	
 });
