@@ -44,12 +44,18 @@ var draw = function( drawables) {
           $("#paddle").offset({top: drawables.paddle.x1, left: drawables.paddle.x2});
 };
 
-window.onload = function() {
-      var bridge = new Bridge({url: "http://136.152.39.187/"}); 
-     
 
-      bridge.ready(function() {
+window.onload = function() {
+  var bridge = new Bridge({url: "http://136.152.39.187/"}); 
+  console.log("ONLOAD");
+  bridge.ready(function() {
     bridge.joinChannel('shot3', { draw: draw});
-  })
+    console.log("READY");
+    bridge.getService("physics", function(x) { 
+      console.log("BY");
+      x.start([[{x: 0, y: 0}, {x: $(window).width(), y: $(window).height()}]], null, 0, 0);
+      console.log("HI");
+    });
+  });
 };
 
