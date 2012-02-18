@@ -10,7 +10,7 @@ html {
   width: 40px;
   border-radius: 20px;
   /*background-color: rgba(20, 100, 250, .7);*/
-  background-color: white;
+  background-color: rgba(220, 220, 250, 1);
   top: 50px;
   left: 20px;
   position: absolute;
@@ -52,8 +52,19 @@ html {
   height: 150px;
   width: 40px;
   border-radius: 5px;
-  background-color: white;
+  background-color: rgba(200, 250, 200, .9);
   top: 400px;
   left: 300px;
   position: absolute;
+}
+
+#title {
+  color: rgba(200, 240, 240, .9);
+  letter-spacing: 2px;
+  text-align: center;
+  font-size: 3em;
+  font-family: Helvetica Neue, Arial, sans-serif;
+  font-weight: bold;
+  font-variant: small-caps;
+  margin: .5em;
 }
