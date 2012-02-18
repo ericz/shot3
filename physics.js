@@ -211,14 +211,14 @@ physics = {
 			vel = {x:Math.abs(vel.x),y:Math.abs(vel.y)};
 		}
 		if ((nextXBall.x>=paddle1.x1&&nextXBall.x<=paddle1.x2&&nextXBall.y<=paddle1.y2&&nextXBall.y>=paddle1.y2)||(nextXBall.x<=paddle1.x2&&nextXBall.x>=paddle1.x1&&nextXBall.y<=paddle1.y2&&nextXBall.y>=paddle1.y1)){
-		vel.x = -vel.x;
-    vel.x *= 1.1;
-    vel.y *= 1.1;
+        vel.x = -vel.x;
+        vel.x *= 1.1;
+        vel.y *= 1.1;
 		}
     if ((nextXBall.x>=paddle2.x1&&nextXBall.x<=paddle2.x2&&nextXBall.y<=paddle2.y2&&nextXBall.y>=paddle2.y2)||(nextXBall.x<=paddle2.x2&&nextXBall.x>=paddle2.x1&&nextXBall.y<=paddle2.y2&&nextXBall.y>=paddle2.y1)){
-		vel.x = -vel.x;
+      vel.x = -vel.x;
         vel.x *= 1.1;
-    vel.y *= 1.1;
+        vel.y *= 1.1;
 		}
 		if (nextXBox == -1){
 			vel.x = -vel.x;
