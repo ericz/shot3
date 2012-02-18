@@ -38,10 +38,10 @@ physics = {
 		return [boundTop, boundBottom];
 	},
 	start:function(r, x, y, o){
-		rotate = start.genericRotation(o);
+		rotate = physics.genericRotation(o);
 	
 		console.log("start");
-		var m = start.cornerFinder(r);
+		var m = physics.cornerFinder(r);
 		boxes = m.corners;
 		soft = m.softs;
 		console.log(boxes);
@@ -51,7 +51,7 @@ physics = {
 	},
 	/** Translates entire bounds by offset. */
 	translate:function(raw) {
-		var bounds = start.findBound(raw);
+		var bounds = physics.findBound(raw);
 		var xoff = bounds[0];
 		var yoff = bounds[1];
 		
@@ -67,10 +67,10 @@ physics = {
 		return pushed;
 	},
 	/** rawmonitors is a list of objects with keys width, height, x, y, 
-  * orientation (0-3). Edgefinder returns a list of top left and bottom
-  * right edges. */
+    * orientation (0-3). Edgefinder returns a list of top left and bottom
+    * right edges. */
 	cornerFinder:function(rawmonitors) {
-		var monitors = start.translate(rawmonitors);
+		var monitors = physics.translate(rawmonitors);
 		monitors.sort(sortByY);
 		
 		// Top edge.
