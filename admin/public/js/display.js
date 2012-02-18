@@ -28,11 +28,11 @@ var draw = function( drawables) {
 var translate;
 
 window.onload = function() {
-  var bridge = new Bridge({url: "http://136.152.39.187:8091/bridge"}); 
+  var bridge = new Bridge({url: "http://136.152.37.120:8091/bridge"}); 
   console.log("ONLOAD");
   bridge.ready(function() {
-    bridge.joinChannel('shot4', { draw: draw}, function(){});
-    bridge.getService("admin2", function(x) { 
+    bridge.joinChannel('shot3', { draw: draw}, function(){});
+    bridge.getService("admin", function(x) { 
      x.addRect($(window).width(), $(window).height(), function(o, tl) {
      		translate = tl;
      		orientation = o;

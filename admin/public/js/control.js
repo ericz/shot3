@@ -19,7 +19,7 @@ $(function(){
     }
   });
   
-  bridge = new Bridge({url: 'http://136.152.39.187:8091/bridge'});
+  bridge = new Bridge({url: 'http://136.152.37.120:8091/bridge'});
   bridge.ready(function(){
     bridge.getService('physics', function(obj){physics = obj});  
   });
