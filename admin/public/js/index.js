@@ -2,8 +2,10 @@
 
 var bridge;
 var physics;
-var addRect = function addRect (w, h) {
-  $('<div></div>').data('o', 0).dblclick(rotate).addClass('rect').css({width: w/7, height: h/7, 'background-color': '#'+Math.floor(Math.random()*16777215).toString(16)}).draggable({snap:true, snapMode: 'outer'}).appendTo('#field');
+
+
+var addRect = function addRect (w, h, callback) {
+  $('<div></div>').data('o', 0).data('cb', callback).dblclick(rotate).addClass('rect').css({width: w/7, height: h/7, 'background-color': '#'+Math.floor(Math.random()*16777215).toString(16)}).draggable({snap:true, snapMode: 'outer'}).appendTo('#field');
 };
 
 var send = function send () {
@@ -17,10 +19,10 @@ var send = function send () {
       height: $(this).height()*7,
       x: pos.left * 7,
       y: pos.top * 7,
-      orientation: $(this).data('o')
+      orientation: $(this).data('o'),
+      callback: [$(this).data('cb')]
     });
   });
-
   physics.start(data, 5,5);
   
 };
