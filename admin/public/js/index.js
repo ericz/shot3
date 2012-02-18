@@ -2,8 +2,11 @@
 
 var bridge;
 var physics;
-var addRect = function addRect (w, h) {
-  $('<div></div>').data('o', 0).dblclick(rotate).addClass('rect').css({width: w, height: h, 'background-color': '#'+Math.floor(Math.random()*16777215).toString(16)}).draggable({snap:true, snapMode: 'outer'}).appendTo('#field');
+
+
+var addRect = function addRect (w, h, callback) {
+  var close = $('<div></div>').addClass('close').click(deleteRect);
+  $('<div></div>').data('o', 0).data('cb', callback).dblclick(rotate).addClass('rect').append(close).css({width: w/7, height: h/7, 'background-color': '#'+Math.floor(Math.random()*16777215).toString(16)}).draggable({snap:true, snapMode: 'outer'}).appendTo('#field');
 };
 
 var send = function send () {
@@ -13,17 +16,22 @@ var send = function send () {
   $('.rect').each(function(){
     var pos = $(this).position();
     data.push({
-      width: $(this).width(),
-      height: $(this).height(),
-      x: pos.left,
-      y: pos.top,
-      orientation: $(this).data('o')
+      width: $(this).width()*7,
+      height: $(this).height()*7,
+      x: pos.left * 7,
+      y: pos.top * 7,
+      orientation: $(this).data('o'),
+      callback: [$(this).data('cb')]
     });
   });
-
-  physics.start(data, 0, 0);
+  console.log(data);
+  physics.start(data, 5,5);
   
 };
+
+var deleteRect = function() {
+  $(this).parent().remove();
+}
 
 var rotate = function() {
   var o = parseInt($(this).data('o'), 10);
@@ -60,7 +68,7 @@ $(function(){
   bridge = new Bridge({url: 'http://136.152.39.187:8091/bridge'});
   bridge.ready(function(){
     bridge.publishService('admin', {addRect: addRect});
-    bridge.getService('physics2', function(obj){physics = obj});  
+    bridge.getService('physics', function(obj){physics = obj});  
   });
 
 });
