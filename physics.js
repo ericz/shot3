@@ -2,7 +2,7 @@ var Bridge = require('./bridge').Bridge;
 var bridge = new Bridge({host:'136.152.39.187'});
 var ball = {x:120,y:120,radius:20};
 var paddle = {x1:50,y1:50,x2:90,y2:60};
-var vel = {x:10,y:10};
+var vel = {x:30,y:30};
 var running = true;
 var hard, soft;
 var shot3;
@@ -20,6 +20,9 @@ physics = {
 	sortByY:function(a, b) {
 		return a.y - b.y;
 	},
+	sortByX:function(a, b) {
+		return a.x - b.x;
+	}
 	/** Finds bounding box, with top left corner and bottom right corner. */
 	findBound:function(monitors) {
 		var minX = Number.MAX_VALUE;
@@ -77,15 +80,16 @@ physics = {
 	cornerFinder:function(rawmonitors) {
 		var monitors = physics.translate(rawmonitors);
 
-		monitors.sort(physics.sortByY);
+		monitors.sort(physics.sortByX);
+		
 		console.log(monitors);
 		// Top edge.
-		var topL = { x: monitors[0].x, y: monitors[0].y };
-		var topR = { x: monitors[0].x + monitors[0].width, y: monitors[0].y };
+		var leftT = { x: monitors[0].x, y: monitors[0].y };
+		var leftB = { x: monitors[0].x, y: monitors[0].y + monitors[0].height };
 		
 		// Bottom edge.
-		var botL = { x: Number.MAX_VALUE, y: Number.MIN_VALUE };
-		var botR = { x: Number.MIN_VALUE, y: Number.MIN_VALUE };
+		var rightT = { x: Number.MIN_VALUE, y: Number.MIN_VALUE };
+		var rightB = { x: Number.MIN_VALUE, y: Number.MAX_VALUE };
 		
 		// Set of all defining corners.
 		var corners = [];
@@ -102,30 +106,29 @@ physics = {
 			var pair = [tl, br, rotate];
 			corners.push(pair);
 			
-			
-			// Check for changes to top edge.
-			if (tl.y == topL.y) {
-				topL.x = Math.min(tl.x, topL.x);
-				topR.x = Math.max(br.x, topR.x);
+			// Check for changes to leftmost edge.
+			if (tl.x == leftT.x) {
+				leftT.y = Math.min(tl.y, leftT.y);
+				leftB.y = Math.max(br.y, leftB.y);
 			}
 			
-			// Check for bottom edge. 
-			if (br.y > botR.y) {
-				botR.y = br.y;
-				botL.y = br.y;
-				botR.x = br.x;
-				botL.x = br.x - m.width;
-			} else if (br.y == botR.y) {
-				botL.x = Math.min(tl.x, botL.x);
-				botR.x = Math.max(br.x, botR.x);
+			// Check for right edge. 
+			if (br.x > rightB.x) {
+				rightT.y = tl.y;
+				rightB.y = br.y;
+				rightT.x = br.x;
+				rightB.x = br.x;
+			} else if (br.x == rightB.x) {
+				rightB.y = Math.max(br.y, rightB.y);
+				rightT.y = Math.min(tl.y, rightT.y);
 			}
 		}
 				console.log(monitors);
 		var sharad = 	{
 										corners: corners, 
 										softs: { 
-														top: [topL, topR], 
-														bottom: [botL, botR]
+														left: [leftT, leftB], 
+														right: [rightT, rightB]
 													}
 									};
 		return sharad;
