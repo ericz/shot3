@@ -37,6 +37,9 @@ physics = {
 		var boundBottom = [maxX, maxY];
 		return [boundTop, boundBottom];
 	},
+	debug:function(b){
+		boxes = b;
+	},
 	start:function(r, x, y, o){
 		rotate = physics.genericRotation(o);
 	
@@ -122,15 +125,14 @@ physics = {
 		curBox =  -1;
 		nextXBox = -1;
 		nextYBox = -1;
-		for (var box in boxes){
-			if (util.softContains(ball,boxes[box])){
+		for (var box = 0; box < boxes.length;box++){
+			if (util.hardContains(ball,boxes[box])){
 				curBox = box;
 			}
 		}
 		nextXBall = {x:(ball.x+vel.x),y:(ball.y),radius:ball.radius};
 		nextYBall = {x:(ball.x),y:(ball.y+vel.y),radius:ball.radius};
-		console.log(ball, nextXBall,nextYBall);
-		for (var box in boxes){
+		for (var box=0;box<boxes.length;box++){
 			if (util.softContains(nextXBall,boxes[box])){
 				nextXBox = box;
 			}
@@ -138,11 +140,14 @@ physics = {
 				nextYBox = box;
 			}
 		}
-		console.log(curBox, nextXBox, nextYBox);
-		if (curBox != nextXBox){
+		console.log(curBox, nextXBox, util.hardContains(ball,boxes[curBox]));
+		if (nextXBox == -1 && !util.hardContains(ball,boxes[curBox])){
 			vel.x = -vel.x;
 		}
-		if (curBox != nextYBox){
+		if (nextXBox == -1){
+			vel.x = -vel.x;
+		}
+		if (nextYBox == -1){
 			vel.y = -vel.y;
 		}
 		ball.x += vel.x;
@@ -154,8 +159,8 @@ physics = {
 }
 util = {
 	hardContains:function(ball,box){
-		return ((ball.x-ball.radius)>=box[0] && (ball.x+ball.radius<=box[1]) && ((ball.y+ball.radius)<=box[1].y && (ball.y-ball.radius)>=box[0].y));
-	},
+		return ((ball.x-ball.radius)>=box[0].x && (ball.x+ball.radius)<=box[1].x) && ((ball.y+ball.radius)<=box[1].y && (ball.y-ball.radius)>=box[0].y)
+},
 	softContains:function(ball,box){
 		return ((ball.x+ball.radius)>=box[0].x && (ball.x-ball.radius)<=box[1].x) && ((ball.y-ball.radius)<=box[1].y && (ball.y+ball.radius)>=box[0].y)
 	}
