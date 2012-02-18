@@ -189,13 +189,15 @@ physics = {
 		shot3.draw({"ball":ball,"paddle":{'1':paddle1,'2':paddle2}});
 	},
 	movePaddle:function(player,amount){
+    console.log('move', arguments);
 		if (player == '1'){
 			paddle1.y1 += amount;
 			paddle1.y2 += amount;
 		} else if (player == '2'){
 			paddle2.y1 += amount;
 			paddle2.y2 += amount;
-		}	
+		}
+    console.log(paddle1, paddle2);
 	} 
 	
 	
