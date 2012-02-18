@@ -183,8 +183,8 @@ physics = {
 		/*if (curBox == -1 && nextXBox != -1){
 			vel.x = -vel.x;
 		}*/
-		console.log(util.hardContains(ball,[{x:paddle1.x1,y:paddle1.y1},{x:paddle1.x2,y:paddle1.y2}]) , util.hardContains(ball,[{x:paddle2.x1,y:paddle2.y1},{x:paddle2.x2,y:paddle2.y2}]));
-		if (nextXBox == -1 || util.hardContains(ball,[{x:paddle1.x1,y:paddle1.y1},{x:paddle1.x2,y:paddle1.y2}]) || util.hardContains(ball,[{x:paddle2.x1,y:paddle2.y1},{x:paddle2.x2,y:paddle2.y2}])){
+		console.log([{x:paddle1.x1,y:paddle1.y1},{x:paddle1.x2,y:paddle1.y2}],[{x:paddle2.x1,y:paddle2.y1},{x:paddle2.x2,y:paddle2.y2}]);
+		if (nextXBox == -1 || util.hardContains(nextXBall,[{x:paddle1.x1,y:paddle1.y1},{x:paddle1.x2,y:paddle1.y2}]) || util.hardContains(nextXBall,[{x:paddle2.x1,y:paddle2.y1},{x:paddle2.x2,y:paddle2.y2}])){
 			vel.x = -vel.x;
 		}
 		if (nextYBox == -1){
