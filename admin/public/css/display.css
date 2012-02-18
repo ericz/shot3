@@ -10,6 +10,9 @@ body {
   top: 50px;
   left: 20px;
   position: absolute;
+  transition: all linear 1s;
+  -webkit-transition: all linear 100ms;
+
 }
 
 

@@ -37,25 +37,22 @@ var frameGap;
  *                                           }*/
 
 var draw = function( drawables) {
-    var ballTop = drawables.ball.x - drawables.ball.radius;
-      var ballLeft = drawables.ball.x - drawables.ball.raddius;
-
-        $("#ball").offset({ top: ballTop, left: ballLeft});
-          $("#paddle").offset({top: drawables.paddle.x1, left: drawables.paddle.x2});
+  var ballTop = drawables.ball.y - drawables.ball.radius;
+  var ballLeft = drawables.ball.x - drawables.ball.radius;
+  $("#ball").offset({ top: ballTop, left: ballLeft});
+  console.log(JSON.stringify(drawables.ball));
+  $("#paddle").offset({top: drawables.paddle.x1, left: drawables.paddle.x2});
 };
 
 
 window.onload = function() {
-  var bridge = new Bridge({url: "http://136.152.39.187/bridge"}); 
+  var bridge = new Bridge({url: "http://136.152.39.187:8091/bridge"}); 
   console.log("ONLOAD");
   bridge.ready(function() {
-    console.log("At start of readY");
-    bridge.joinChannel('shot3', { draw: draw});
-    console.log("READY");
+    bridge.joinChannel('shot3', { draw: draw}, function(){});
     bridge.getService("physics", function(x) { 
-      console.log("BY");
       x.start([[{x: 0, y: 0}, {x: $(window).width(), y: $(window).height()}]], null, 0, 0);
-      console.log("HI");
+      setInterval(function() {x.update(draw)}, 100);
     });
   });
 };
