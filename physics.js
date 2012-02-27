@@ -1,9 +1,9 @@
 var Bridge = require('./bridge').Bridge;
-var bridge = new Bridge({host:'136.152.37.120'});
+var bridge = new Bridge({host:'localhost', port: 8090, 'apiKey': 'abcdefgh'});
 var ball = {x:120,y:120,radius:20};
 var paddle1 = {x1:50,y1:50,x2:90,y2:60};
 var paddle2 = {x1:50,y1:50,x2:90,y2:70};
-var vel = {x:20,y:20};
+var vel = {x:60,y:60};
 var startX, startY, startVel;
 var running = true;
 var hard, soft;
@@ -225,9 +225,9 @@ physics = {
 		
 		if (nextXBall.x>=soft.right[0].x){
 			score1++;
-			ball.x = startX;
-			ball.y = startY;
-			vel = {x:30,y:30};
+			ball.x = startX*Math.random();
+			ball.y = startY*Math.random();
+			vel = {x:60,y:60};
 		}
 		if (nextXBall.x<=soft.left[0].x){
 			score2++;

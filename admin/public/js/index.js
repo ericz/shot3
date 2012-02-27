@@ -70,7 +70,7 @@ $(function(){
     physics.stop();
   });
   
-  bridge = new Bridge({url: 'http://136.152.37.120:8091/bridge'});
+  bridge = new Bridge({host: '192.168.2.7', port: 8091, 'apiKey': 'abcdefgh'});
   bridge.ready(function(){
     bridge.publishService('admin', {addRect: addRect});
     bridge.getService('physics', function(obj){physics = obj});  

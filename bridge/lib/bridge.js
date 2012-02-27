@@ -1,5 +1,8 @@
 var defaultOptions = {
-  url: 'http://localhost:8080/bridge',
+  protocol: 'http://',
+  /*host: 'localhost',
+  port: 8091,*/
+  redirector: 'http://redirector.flotype.com',
   reconnect: true,
   log: 2,
   tcp: false
@@ -14,8 +17,7 @@ var Serializer = require('./serializer.js');
 var Ref = require('./ref.js');
 
 util.extend(defaultOptions, {
-  host: 'localhost',
-  port: 8090,
+  /*port: 8090,*/
   tcp: true
 });
 
@@ -48,10 +50,10 @@ function Bridge(options) {
       self.emit('remoteError', [msg]);
     }
   };
-  
+
   // Set configuration options
   this.options = util.extend(defaultOptions, options);
-  
+
   // Set logging level
   util.setLogLevel(this.options.log);
 
@@ -63,7 +65,7 @@ function Bridge(options) {
 
   // Communication layer
   this.connection = new Connection(this);
-  
+
   // Store event handlers
   this._events = {};
 }
@@ -137,12 +139,12 @@ Bridge.prototype.execute = function(pathchain, args) {
 
 
 Bridge.prototype.publishService = function(name, service, callback) {
-  
+
   if(name === "system") {
     util.error("Invalid service name: " + name);
     return;
   }
-  
+
   var self = this;
 
   if ( (!service._getRef) || (util.typeOf(service._getRef) !== 'function') ) {
@@ -163,16 +165,19 @@ Bridge.prototype.createCallback = function(service) {
   if ( (!service._getRef) || (util.typeOf(service._getRef) !== 'function') ) {
     name = util.generateGuid();
     ref = self.getPathObj( ['client', self.getClientId(), name] );
+    this.children[name] = service;
   } else {
     ref = service._getRef();
-    name = service.getLocalName();
   }
-  this.children[name] = service;
   return ref;
 };
 
 Bridge.prototype.joinChannel = function(name, handler, callback) {
   this.connection.joinChannel(name, handler, callback);
+};
+
+Bridge.prototype.leaveChannel = function(name, handler, callback) {
+  this.connection.leaveChannel(name, handler, callback);
 };
 
 Bridge.prototype.send = function(args, destination) {

@@ -28,7 +28,7 @@ var draw = function( drawables) {
 var translate;
 
 window.onload = function() {
-  var bridge = new Bridge({url: "http://136.152.37.120:8091/bridge"}); 
+  var bridge = new Bridge({host: '192.168.2.7', port: 8091, 'apiKey': 'abcdefgh'}); 
   console.log("ONLOAD");
   bridge.ready(function() {
     bridge.joinChannel('shot3', { draw: draw}, function(){});
